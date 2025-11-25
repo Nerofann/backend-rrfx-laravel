@@ -18,7 +18,7 @@ class ApiResponse
         return response()
             ->json([
                 'message' => $message,
-                'data' => $data
+                'data' => $data ?: (object)[]
             ], 
             $code
         );
@@ -40,7 +40,7 @@ class ApiResponse
         return response()
             ->json([
                 'message' => $message ?? self::statusText($code),
-                'errors' => $errors
+                'errors' => $errors ?: (object)[]
             ], 
             $code
         );
