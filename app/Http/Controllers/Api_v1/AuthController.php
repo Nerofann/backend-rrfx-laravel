@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserSession;
 use App\Support\ApiResponse;
-use DB;
 use Exception;
-use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use mysqli_sql_exception;
-use Nette\Utils\Random;
-use Str;
-use Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -27,7 +26,7 @@ class AuthController extends Controller
         ]);
 
         if($validated->errors()->isNotEmpty()) {
-            return ApiResponse::validationError(errors: $validated->errors()->toArray());
+            return ApiResponse::validationError("Validation Failed", $validated->errors()->toArray());
         }
 
         /** validasi email */
@@ -104,7 +103,7 @@ class AuthController extends Controller
         ]);
 
         if($validated->errors()->isNotEmpty()) {
-            return ApiResponse::validationError(errors: $validated->errors()->toArray());
+            return ApiResponse::validationError("Validation Failed", $validated->errors()->toArray());
         }
 
         /** Check Refferal Code */
