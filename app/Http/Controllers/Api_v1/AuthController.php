@@ -26,7 +26,7 @@ class AuthController extends Controller
         ]);
 
         if($validated->errors()->isNotEmpty()) {
-            return ApiResponse::validationError("Validation Failed", $validated->errors()->toArray());
+            return ApiResponse::validationError(errors: $validated->errors()->toArray());
         }
 
         /** validasi email */
@@ -103,7 +103,7 @@ class AuthController extends Controller
         ]);
 
         if($validated->errors()->isNotEmpty()) {
-            return ApiResponse::validationError("Validation Failed", $validated->errors()->toArray());
+            return ApiResponse::validationError(errors: $validated->errors()->toArray());
         }
 
         /** Check Refferal Code */

@@ -35,11 +35,19 @@ class ApiResponse
         );
     }
 
-    public static function validationError(string $message = 'Validation Error', array $errors = [], int $code = 422)
+    public static function validationError(string $message = '', array $errors = [], int $code = 422)
     {
+        $default = "Validation Error";
+        if(empty($message)) {
+            $values = array_values($errors);
+            if(!empty($values[0][0])) {
+                $default = $values[0][0];
+            }
+        }
+
         return response()
             ->json([
-                'message' => $message ?? self::statusText($code),
+                'message' => $default ?? self::statusText($code),
                 'errors' => $errors ?: (object)[]
             ], 
             $code
