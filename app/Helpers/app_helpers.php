@@ -1,5 +1,7 @@
 <?php
 
+use Tymon\JWTAuth\Providers\Auth\Illuminate;
+
 if(!function_exists('generate_user_id')) {
     /** Generate unique user_id */
     function generate_user_id() {
@@ -47,13 +49,13 @@ if (!function_exists('normalize_phone')) {
 if(!function_exists('generateUniqueUsername')) {
     function generateUniqueUsername(string $username): string
     {
-        $base = Str::slug($username, '');
+        $base = \Illuminate\Support\Str::slug($username, '');
 
         $new = $base;
-        $counter = Str::random(3) . rand(100, 999);
-        while (\DB::table('users')->where('username', $new)->exists()) {
+        $counter = \Illuminate\Support\Str::random(3) . rand(100, 999);
+        while (\Illuminate\Support\Facades\DB::table('users')->where('username', $new)->exists()) {
             $new = $base . $counter;
-            $counter = Str::random(3) . rand(100, 999);
+            $counter = \Illuminate\Support\Str::random(3) . rand(100, 999);
         }
 
         return $new;
