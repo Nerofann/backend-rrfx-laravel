@@ -62,6 +62,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Generate Refresh Token Method
+     */
     protected function generateRefreshToken(User $user, Request $request): string|bool {
         $refreshToken = Str::random(64);
         $attributes = [
@@ -88,7 +91,6 @@ class AuthController extends Controller
 
         return $refreshToken;
     }
-
 
     /**
      * Registration Method
@@ -177,5 +179,43 @@ class AuthController extends Controller
 
             return ApiResponse::error('Internal Server Error');
         }
+    }
+
+    /**
+     * Refresh Token Method
+     */
+    public function refresh(Request $request) {
+        /** update refresh token */
+        $refreshToken = $request->header('X-Refresh-Token') ?? "";
+        if(empty($refreshToken)) {
+            return ApiResponse::error('Refresh Token is required');
+        }
+
+        $oldSession = UserSession::where('refresh_token_hash', hash('sha256', $refreshToken))->first();
+        $newRefreshToken = Str::random(64);
+        if(!$oldSession) {
+            return ApiResponse::error('Invalid Refresh Token');
+        }
+
+        $oldSession->refresh_token_hash = hash('sha256', $newRefreshToken);
+        $oldSession->last_activity_at = now();
+        $oldSession->save();
+
+        $user = User::find($oldSession->user_id);
+        if(!$user) {
+            return ApiResponse::error('Failed to refresh token');
+        }
+
+        $accessToken = auth('api')->login($user);
+        if(!$accessToken) {
+            return ApiResponse::error('Failed');
+        }
+
+        return ApiResponse::success('Token refreshed successfully', [
+            'access_token' => $accessToken,
+            'refresh_token' => $newRefreshToken,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
     }
 }
