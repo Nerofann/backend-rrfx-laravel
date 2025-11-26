@@ -2,10 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Support\ApiResponse;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 use mysqli_sql_exception;
 use Throwable;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,6 +32,26 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        // Handle JWT Exceptions
+        $this->renderable(function (TokenExpiredException $e, $request) {
+            return ApiResponse::error('Token has expired', [], 401);
+        });
+
+        $this->renderable(function (TokenInvalidException $e, $request) {
+            return ApiResponse::error('Token is invalid', [], 401);
+        });
+
+        $this->renderable(function (JWTException $e, $request) {
+            return ApiResponse::error('Token is required', [], 401);
+        });
+
+        // Handle Authentication Exception
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->is('v1/*') || $request->expectsJson()) {
+                return ApiResponse::error('Unauthenticated', [], 401);
+            }
         });
     }
 
