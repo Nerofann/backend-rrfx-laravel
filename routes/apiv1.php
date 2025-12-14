@@ -35,5 +35,9 @@ Route::prefix("/public")->group(function() {
 });
 
 Route::middleware('auth:api')->group(function() {
+    // Profile Route
     Route::get('/user/profile', [UserController::class, 'userinfo']);
+    
+    // Verification Route
+    Route::post('/verification/step-1', [UserController::class, 'verificationStep1']);
 });

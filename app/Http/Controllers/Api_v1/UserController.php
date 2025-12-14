@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api_v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Rules\AlphaSpace;
 use App\Support\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -26,5 +27,20 @@ class UserController extends Controller
             'is_verified' => $user->is_verified,
             'app_theme' => $user->app_theme,
         ]);
+    }
+
+    public function verificationStep1(Request $request) {
+        $user = auth()->user();
+        $validated = Validator::make($request->only(['fullname', 'gender', 'phone_code', 'phone']), [
+            'fullname' => ['required', 'string', 'max:255', new AlphaSpace],
+            'gender' => ['required', 'string'],
+            'phone_code' => ['required', 'string', 'max:10'],
+            'phone' => ['required', 'string', 'max:20'],
+        ]);
+
+        if(!$validated->errors()->isEmpty()) {
+            return ApiResponse::validationError(errors: $validated->errors()->toArray());
+        }
+
     }
 }
