@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('gender_id')->nullable()->constrained('genders')->nullable()->after('max_account_micro')->cascadeOnUpdate();
+            $table->foreignId('gender_id')->nullable()->after('max_account_micro')->constrained('genders')->cascadeOnUpdate();
         });
     }
 
