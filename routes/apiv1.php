@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api_v1\AuthController;
 use App\Http\Controllers\Api_v1\PublicController;
 use App\Http\Controllers\Api_v1\UserController;
+use App\Http\Controllers\Api_v1\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,5 +40,5 @@ Route::middleware('auth:api')->group(function() {
     Route::get('/user/profile', [UserController::class, 'profile']);
     
     // Verification Route
-    Route::post('/verification/step-1', [UserController::class, 'verificationStep1']);
+    Route::post('/verification/step-1', [VerificationController::class, 'step_1']);
 });
