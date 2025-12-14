@@ -64,4 +64,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+
+    public function gender()
+    {
+        return $this->belongsto(Gender::class, 'gender_id');
+    }
 }
