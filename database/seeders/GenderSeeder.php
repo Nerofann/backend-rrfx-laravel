@@ -17,10 +17,12 @@ class GenderSeeder extends Seeder
         DB::table("genders")->insertOrIgnore([
             [
                 'name' => "Laki-laki",
+                'code' => "L",
                 'created_at' => date("Y-m-d H:i:s") 
             ],
             [
                 'name' => "Perempuan",
+                'code' => "P",
                 'created_at' => date("Y-m-d H:i:s") 
             ]
         ]);
