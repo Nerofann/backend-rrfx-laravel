@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function userinfo() {
+    public function profile() {
         $user = (object) auth()->user();
         return ApiResponse::success("OK", [
             'fullname' => $user->name,
