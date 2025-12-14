@@ -47,7 +47,7 @@ class VerificationController extends Controller
         }
 
         /** check nomor telepon sudah digunakan / belum */
-        $existingPhone = User::where('phone', $phone)->where('id', $user->id)->first();
+        $existingPhone = User::where('phone', $phone)->where('id', '!=', $user->id)->first();
         if ($existingPhone) {
             $validated->errors()->add('phone', 'Phone number already in use');
             return ApiResponse::validationError(errors: $validated->errors()->toArray());
@@ -58,7 +58,9 @@ class VerificationController extends Controller
             'name' => $data['fullname'],
             'gender_id' => $gender->id,
             'phone_code' => $data['phone_code'],
-            'phone' => $phone
+            'phone' => $phone,
+            'address' => $request->get('address', '-'),
+            'is_verified' => 1
         ];
 
         $update = User::where('id', '=', $user->id)->update($updateData);
