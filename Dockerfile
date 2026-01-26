@@ -52,12 +52,11 @@ RUN composer install \
 ###################################
 COPY . .
 
+
 ###################################
 # 5️⃣ Laravel Optimizations
 ###################################
-RUN php artisan config:clear \
-    && php artisan route:clear \
-    && php artisan view:clear \
+RUN php artisan package:discover --ansi \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
