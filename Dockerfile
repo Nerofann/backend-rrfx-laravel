@@ -40,6 +40,7 @@ WORKDIR /var/www/html
 # 3️⃣ Install PHP Dependencies (Cache Layer)
 ###################################
 COPY composer.json composer.lock ./
+COPY app/Helpers ./app/Helpers
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
